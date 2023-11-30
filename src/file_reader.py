@@ -14,13 +14,11 @@ class FileReader:
     
     def parse(self, line):
         instruction = []
-        
         line = line.split(" ")
-        # print(line)
         for i in line:
             if i == '':
                 continue
-            # i.strip(" ")
+            i.strip(" ")
             instruction.append(i)
         
         self.instructions.append(instruction)

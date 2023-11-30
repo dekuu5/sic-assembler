@@ -10,7 +10,7 @@ ENDFIL  LDA     EOF
         STA     BUFFER
         JSUB    WRREC
         J       @RETADR
-EOF     BYTE    C'EO F'
+EOF     BYTE    C'EOF'
 LENGTH  WORD    0
 BUFFER  RESB    4096
 RETADR  RESW    1
