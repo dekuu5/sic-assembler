@@ -8,13 +8,17 @@ def main():
         fileReader.read()
         instructions = fileReader.getInstructions()
 
+    for i in instructions:
+        print(i)
     pcGenerator = PcGenerator(instructions)
     pcGenerator.generate()
     instructions = pcGenerator.getInstructions()
     labelMap = pcGenerator.getLabelMap()
-    assembler = Assembler(instructions,labelMap)
-    assembler.GenerateObjectCode()
-    Assembler.Save("ob1.txt")
+    for i in instructions:
+        print(i)
+    # assembler = Assembler(instructions,labelMap)
+    # assembler.generateObjectCode()
+    # Assembler.Save("ob1.txt")
     
 
 if __name__ == "__main__":

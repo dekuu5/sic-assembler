@@ -1,22 +1,23 @@
 class FileReader:
     
-    def __init__(self, fileName, opcode = False, instructions= True) -> None:
+    def __init__(self, fileName, opcode = False, instruction= True) -> None:
         self.file = open(fileName, 'r')
         self.instructions = []
         self.opCode = opcode
-        self.instructions = instructions
+        self.instruction = instruction
 
     def read(self) -> None:
         content = self.file.read()
         content = content.split("\n")
         
         for line in content:
-            
+            if line == '':
+                continue
             self.parse(line)
     
     def parse(self, line):
         instruction = []
-        line = line.split(" ")
+        line = line.split(" ", 2)
         for i in line:
             if i == '':
                 continue

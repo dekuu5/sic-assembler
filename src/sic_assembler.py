@@ -39,6 +39,8 @@ class Assembler:
     def __init__(self, instructions, labelMap):
         self.instructions = instructions
         self.labelMap= labelMap
+        self.directives = ['BYTE', 'WORD', 'RESB', 'RESW']
+        self.objectCode = []
         self.instruction_map = {
     'ADD': '18',
     'AND': '40',
@@ -83,3 +85,11 @@ class Assembler:
     'TIXR': 'B8',
     'WD': 'DC',
 }
+        
+
+    def generateObjectCode(self):
+        for instruction in self.instructions:
+            if ',X' in instruction[2]:
+                pass
+                
+
