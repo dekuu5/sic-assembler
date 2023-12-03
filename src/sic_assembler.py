@@ -125,10 +125,7 @@ class Assembler:
         if byteData.startswith("X'") and byteData.endswith("'"):
             return int(byteData[2:-1], 16)
         elif byteData.startswith("C'") and byteData.endswith("'"):
-            values = []
-            for char in byteData[2:-1]:
-                values.append(ord(char))
-        return values
+            return ord(byteData[2: -1])
         else:
             return int(byteData)
 
@@ -142,4 +139,16 @@ class Assembler:
         
     def getObjectCode(self):
         return self.objectCode
-                
+    
+    def save(self, filename):
+        try:
+            with open(filename, 'w') as file:
+                for codeLine in self.objectCode:
+                    file.write(str(codeLine) + '\n')
+            print(f"Object code successfully saved to {filename}")
+            return True
+        except Exception as e:
+            print(f"Error saving object code to {filename}: {e}")
+            return False
+
+
