@@ -6,7 +6,7 @@ class FileReader:
         self.instruction_flag = instruction
         self.file = None
         self.instructions = []
-        self.opcodes = []
+        self.opcodes = {}
 
     def __enter__(self):
         try:
@@ -20,20 +20,26 @@ class FileReader:
         if self.file:
             self.file.close()
             print("File closed")
+        
+    def read(self):
+        if self.opcode_flag:
+            self.read_opcodes()
+        elif self.instruction_flag:
+            self.read_instructions()
 
     def parse_instruction(self, line):
         parts = line.split(" ", 2)
         parts = [part.strip() for part in parts if part.strip()]
 
-        if len(parts) > 1:
-            return parts
+        if len(parts) > 0:
+            self.instructions.append(parts)
 
     def parse_opcode(self, line):
-        parts = line.split(" ", 2)
+        parts = line.split(" ", 1)
         parts = [part.strip() for part in parts if part.strip()]
 
         if len(parts) > 0:
-            return parts[0]
+            self.opcodes[parts[0]] = parts[1]
 
     def read_instructions(self) -> None:
         if not self.file:
@@ -48,12 +54,11 @@ class FileReader:
     def read_opcodes(self) -> None:
         if not self.file:
             return
-
-        for line in self.file:
+        lines = self.file.readlines()
+        for line in lines:
             if line.strip():
-                opcode = self.parse_opcode(line.strip())
-                if opcode:
-                    self.opcodes.append(opcode)
+                self.parse_opcode(line.strip())
+                
 
     def getInstructions(self):
         return self.instructions
