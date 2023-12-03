@@ -105,7 +105,8 @@ class Assembler:
         labelAddress = self.labelMap[instruction[2]]
         opCode = self.instruction_map[instruction[1]]
         binaryAddress =  bin(int(labelAddress, 16))[2:]
-        binaryAddress[0] = '1'
+        binaryAddress = '1' + binaryAddress.zfill(15)
+        print(binaryAddress)
         labelAddress = hex(int(binaryAddress,2))[2:]
         self.objectCode.append(opCode + labelAddress)
     
@@ -115,9 +116,12 @@ class Assembler:
         else: 
             self.objectCode.append(self.wordToObjectCode(instruction[2]))
         
+    def generateObjectCodeNonIndexing(self,instruction):
+        labelAddres = self.labelMap[instruction[2]][2:]
+        opCode = self.instruction_map[instruction[1]]
+        self.objectCode.append(opCode + labelAddres)
 
-
-    def byteToObjectCode(byteData: str):
+    def byteToObjectCode(self, byteData):
         if byteData.startswith("X'") and byteData.endswith("'"):
             return int(byteData[2:-1], 16)
         elif byteData.startswith("C'") and byteData.endswith("'"):
@@ -125,12 +129,15 @@ class Assembler:
         else:
             return int(byteData)
 
-    def wordToObjectCode(wordData):
+    def wordToObjectCode(self, wordData):
         if wordData.startswith("X'") and wordData.endswith("'"):
             return int(wordData[2:-1], 16)
         elif wordData.startswith("C'") and wordData.endswith("'"):
             return sum(ord(char) << (8 * index) for index, char in enumerate(wordData[2:-1]))
         else:
             return int(wordData)
+        
+    def getObjectCode(self):
+        return self.objectCode
                 
 
