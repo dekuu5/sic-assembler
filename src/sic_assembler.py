@@ -125,7 +125,10 @@ class Assembler:
         if byteData.startswith("X'") and byteData.endswith("'"):
             return int(byteData[2:-1], 16)
         elif byteData.startswith("C'") and byteData.endswith("'"):
-            return ord(byteData[2: -1])
+           values = []
+           for char in byteData[2:-1]:
+             values.append(ord(char))
+             return values
         else:
             return int(byteData)
 
