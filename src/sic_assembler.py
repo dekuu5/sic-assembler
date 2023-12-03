@@ -90,6 +90,47 @@ class Assembler:
     def generateObjectCode(self):
         for instruction in self.instructions:
             if ',X' in instruction[2]:
-                pass
+                instruction = [i.replace(',X', '') for i in instruction]
+                self.GenerateObjectCodeIndexing(instruction)
+            elif instruction[1] == 'RESW' or instruction[1] == 'RESB':
+                continue
+            elif instruction[1] == 'BYTE' or instruction[1] == 'WORD':
+                self.generateObjectCodeByteOrWord(instruction)
+            else :
+                self.generateObjectCodeNonIndexing(instruction)
+            
+        print("Object Code Generated")
+    
+    def GenerateObjectCodeIndexing(self, instruction):
+        labelAddres = self.labelMap[instruction[2]]
+        opCode = self.instruction_map[instruction[1]]
+        binaryAddress =  bin(int(labelAddres, 16))[2:]
+        binaryAddress[0] = 1
+        labelAddres = hex(int(binaryAddress,2))[2:]
+        self.objectCode.append(opCode + labelAddres)
+    
+    def generateObjectCodeByteOrWord(self, instruction):
+        if instruction[1] == 'BYTE':
+            self.objectCode.append(self.byteToObjectCode(instruction[2]))
+        else: 
+            self.objectCode.append(self.wordToObjectCode(instruction[2]))
+        
+
+
+    def byteToObjectCode(byteData: str):
+        if byteData.startswith("X'") and byteData.endswith("'"):
+            return int(byteData[2:-1], 16)
+        elif byteData.startswith("C'") and byteData.endswith("'"):
+            return ord(byteData[2: -1])
+        else:
+            return int(byteData)
+
+    def wordToObjectCode(wordData):
+        if wordData.startswith("X'") and wordData.endswith("'"):
+            return int(wordData[2:-1], 16)
+        elif wordData.startswith("C'") and wordData.endswith("'"):
+            return sum(ord(char) << (8 * index) for index, char in enumerate(wordData[2:-1]))
+        else:
+            return int(wordData)
                 
 
