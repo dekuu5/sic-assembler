@@ -35,4 +35,9 @@ class FileReader:
     def __exit__(self, exc_type, exc_value, traceback):
         self.file.close()
         print("File closed")
+
+
+# TODO : change read method to read opcode or instructions
+# TODO : make a functions for parsing instructions and anther for parsing opcodes
+# TODO : make to return opcode or instructions
         

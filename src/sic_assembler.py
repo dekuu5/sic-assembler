@@ -105,7 +105,7 @@ class Assembler:
         labelAddres = self.labelMap[instruction[2]]
         opCode = self.instruction_map[instruction[1]]
         binaryAddress =  bin(int(labelAddres, 16))[2:]
-        binaryAddress[0] = 1
+        binaryAddress[0] = '1'
         labelAddres = hex(int(binaryAddress,2))[2:]
         self.objectCode.append(opCode + labelAddres)
     
