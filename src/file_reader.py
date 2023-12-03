@@ -1,5 +1,5 @@
 class FileReader:
-
+    
     def __init__(self, fileName, opcode=False, instruction=True) -> None:
         self.file_name = fileName
         self.opcode_flag = opcode
@@ -21,34 +21,45 @@ class FileReader:
             self.file.close()
             print("File closed")
 
-    def read(self) -> None:
-        if not self.file:
-            return
-
-        content = self.file.read()
-        content = content.split("\n")
-        
-        for line in content:
-            if line == '':
-                continue
-            self.parse(line)
-
-    def parse(self, line):
+    def parse_instruction(self, line):
         parts = line.split(" ", 2)
         parts = [part.strip() for part in parts if part.strip()]
 
-        if self.instruction_flag and len(parts) > 1:
-            self.instructions.append(parts)
+        if len(parts) > 1:
+            return parts
 
-        if self.opcode_flag and len(parts) > 0:
-            self.opcodes.append(parts[0])
+    def parse_opcode(self, line):
+        parts = line.split(" ", 2)
+        parts = [part.strip() for part in parts if part.strip()]
+
+        if len(parts) > 0:
+            return parts[0]
+
+    def read_instructions(self) -> None:
+        if not self.file:
+            return
+
+        for line in self.file:
+            if line.strip():
+                instruction = self.parse_instruction(line.strip())
+                if instruction:
+                    self.instructions.append(instruction)
+
+    def read_opcodes(self) -> None:
+        if not self.file:
+            return
+
+        for line in self.file:
+            if line.strip():
+                opcode = self.parse_opcode(line.strip())
+                if opcode:
+                    self.opcodes.append(opcode)
 
     def getInstructions(self):
         return self.instructions
     
     def getOpcodes(self):
         return self.opcodes
-
 
 # TODO : change read method to read opcode or instructions
 # TODO : make a functions for parsing instructions and anther for parsing opcodes
