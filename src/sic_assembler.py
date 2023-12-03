@@ -88,7 +88,7 @@ class Assembler:
         
 
     def generateObjectCode(self):
-        for instruction in self.instructions:
+        for instruction in self.instructions[1:]:
             if ',X' in instruction[2]:
                 instruction = [i.replace(',X', '') for i in instruction]
                 self.GenerateObjectCodeIndexing(instruction)
@@ -102,12 +102,13 @@ class Assembler:
         print("Object Code Generated")
     
     def GenerateObjectCodeIndexing(self, instruction):
-        labelAddres = self.labelMap[instruction[2]]
+        labelAddress = self.labelMap[instruction[2]]
         opCode = self.instruction_map[instruction[1]]
-        binaryAddress =  bin(int(labelAddres, 16))[2:]
-        binaryAddress[0] = '1'
-        labelAddres = hex(int(binaryAddress,2))[2:]
-        self.objectCode.append(opCode + labelAddres)
+        binaryAddress =  bin(int(labelAddress, 16))[2:]
+        binaryAddress = '1' + binaryAddress.zfill(15)
+        print(binaryAddress)
+        labelAddress = hex(int(binaryAddress,2))[2:]
+        self.objectCode.append(opCode + labelAddress)
     
     def generateObjectCodeByteOrWord(self, instruction):
         if instruction[1] == 'BYTE':
@@ -115,22 +116,30 @@ class Assembler:
         else: 
             self.objectCode.append(self.wordToObjectCode(instruction[2]))
         
+    def generateObjectCodeNonIndexing(self,instruction):
+        labelAddres = self.labelMap[instruction[2]][2:]
+        opCode = self.instruction_map[instruction[1]]
+        self.objectCode.append(opCode + labelAddres)
 
-
-    def byteToObjectCode(byteData: str):
+    def byteToObjectCode(self, byteData):
         if byteData.startswith("X'") and byteData.endswith("'"):
             return int(byteData[2:-1], 16)
         elif byteData.startswith("C'") and byteData.endswith("'"):
-            return ord(byteData[2: -1])
+            values = []
+            for char in byteData[2:-1]:
+                values.append(ord(char))
+        return values
         else:
             return int(byteData)
 
-    def wordToObjectCode(wordData):
+    def wordToObjectCode(self, wordData):
         if wordData.startswith("X'") and wordData.endswith("'"):
             return int(wordData[2:-1], 16)
         elif wordData.startswith("C'") and wordData.endswith("'"):
             return sum(ord(char) << (8 * index) for index, char in enumerate(wordData[2:-1]))
         else:
             return int(wordData)
+        
+    def getObjectCode(self):
+        return self.objectCode
                 
-
