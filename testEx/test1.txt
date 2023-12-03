@@ -1,37 +1,20 @@
 COPY    START   1000
-FIRST   STL     RETADR
-CLOOP   JSUB    RDREC
-        LDA     LENGTH
-        COMP    ZERO
-        JEQ     ENDFIL
-        JSUB    WRREC
-        J       CLOOP
-ENDFIL  LDA     EOF
-        STA     BUFFER
-        JSUB    WRREC
-        J       @RETADR
-EOF     BYTE    C'EOF'
-LENGTH  WORD    0
-BUFFER  RESB    4096
-RETADR  RESW    1
-ZERO    WORD    0
-RDREC   LDX     ZERO
-        LDA     ZERO
-RLOOP   TD      INPUT
-        JEQ     RLOOP
-        RD      INPUT
-        COMP    #3
-        JEQ     EXIT
-        STCH    BUFFER,X
-        TIX     LENGTH
-        JLT     RLOOP
-EXIT    STX     LENGTH
-        RSUB
-WRREC   LDX     ZERO
-WLOOP   TD      OUTPUT
-        JEQ     WLOOP
-        LDX     LENGTH
-        JSUB    RDREC
-        J       WLOOP
-INPUT   BYTE       X'F1'
-OUTPUT  BYTE    X'05'
+LDA BETA
+MUL BETA
+STA VAL
+LDA THREE
+MUL GAMMA
+MUL DELTA
+STA E1
+LDA VAL
+SUB EQ
+STA ALPHA
+ALPHA RESW 1
+BETA RESW 1
+GAMMA RESW 1
+DELTA RESW 1
+VAL RESW 3
+THREE WORD 3
+EQ RESW 1
+
+s byte c'sqsqsq'

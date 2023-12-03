@@ -1,28 +1,28 @@
 class PcGenerator:
     def __init__(self,instructions):
         self.instructions = instructions
-        self.start = hex((int)(instructions[0][2]))
+        self.start = int(instructions[0][2],16)
         self.directives = ['BYTE', 'WORD', 'RESB', 'RESW']
         self.labelMap = {}
 
     def generate(self):
-        currentPc = int(self.start, 16)  # Convert the hexadecimal string to an integer
+        currentPc = self.start 
         for index, instruction in enumerate(self.instructions[1:]):
             if len(instruction) < 3:
                 self.instructions[index + 1].insert(0, hex(currentPc))
-                currentPc += 3  # Increment the integer value
-            elif instruction[2] in self.directives:
+                currentPc += 3
+            elif instruction[1] in self.directives:
                 self.labelMap[instruction[0]] = hex(currentPc)
                 self.instructions[index + 1][0] = hex(currentPc)
-                if instruction[2] == 'BYTE':
-                    currentPc += len(instruction[3]) - 3
-                elif instruction[2] == 'WORD':
+                if instruction[1] == 'BYTE':
+                    currentPc += len(instruction[2]) - 3
+                elif instruction[1] == 'WORD':
                     currentPc += 3
-                elif instruction[2] == 'RESB':
-                    currentPc += int(instruction[3])
-                elif instruction[2] == 'RESW':
-                    currentPc += 3 * int(instruction[3])
-            else:
+                elif instruction[1] == 'RESB':
+                    currentPc += int(instruction[2])
+                elif instruction[1] == 'RESW':
+                    currentPc += 3 * int(instruction[2])
+            else: 
                 self.labelMap[instruction[0]] = hex(currentPc)
                 self.instructions[index + 1][0] = hex(currentPc)
                 currentPc += 3
@@ -33,3 +33,53 @@ class PcGenerator:
     def getInstructions(self):
         return self.instructions
         
+
+
+class Assembler:
+    def __init__(self, instructions, labelMap):
+        self.instructions = instructions
+        self.labelMap= labelMap
+        self.instruction_map = {
+    'ADD': '18',
+    'AND': '40',
+    'COMP': '28',
+    'DIV': '24',
+    'J': '3C',
+    'JEQ': '30',
+    'JGT': '34',
+    'JLT': '38',
+    'JSUB': '48',
+    'LDA': '00',
+    'LDB': '68',
+    'LDCH': '50',
+    'LDF': '70',
+    'LDL': '08',
+    'LDS': '6C',
+    'LDT': '74',
+    'LDX': '04',
+    'MUL': '20',
+    'OR': '44',
+    'RD': 'D8',
+    'RSUB': '4C',
+    'SIO': 'F0',
+    'SSK': 'EC',
+    'STA': '0C',
+    'STB': '78',
+    'STCH': '54',
+    'STF': '80',
+    'STI': 'D4',
+    'STL': '14',
+    'STS': '7C',
+    'STSW': 'E8',
+    'STT': '84',
+    'STX': '10',
+    'SUB': '1C',
+    'SUBF': '5C',
+    'SUBR': '94',
+    'SVC': 'B0',
+    'TD': 'E0',
+    'TIO': 'F8',
+    'TIX': '2C',
+    'TIXR': 'B8',
+    'WD': 'DC',
+}

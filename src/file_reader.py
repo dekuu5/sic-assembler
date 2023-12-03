@@ -1,8 +1,10 @@
 class FileReader:
     
-    def __init__(self, fileName) -> None:
+    def __init__(self, fileName, opcode = False, instructions= True) -> None:
         self.file = open(fileName, 'r')
         self.instructions = []
+        self.opCode = opcode
+        self.instructions = instructions
 
     def read(self) -> None:
         content = self.file.read()

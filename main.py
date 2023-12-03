@@ -1,5 +1,6 @@
 from src.file_reader import FileReader
-from src.sic_assembler import PcGenerator
+from src.sic_assembler import PcGenerator,Assembler
+
 
 def main():
     fileName = '/home/dekuu5/Code/myProjects/faculty-projects/sic-assembler/testEx/test1.txt'
@@ -11,9 +12,9 @@ def main():
     pcGenerator.generate()
     instructions = pcGenerator.getInstructions()
     labelMap = pcGenerator.getLabelMap()
-    for i in instructions:
-        print(i)
-    print(labelMap)
+    assembler = Assembler(instructions,labelMap)
+    assembler.GenerateObjectCode()
+    Assembler.Save("ob1.txt")
     
 
 if __name__ == "__main__":
