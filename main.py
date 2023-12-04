@@ -16,7 +16,7 @@ def main():
         print(i)
     assembler = Assembler(instructions,labelMap)
     assembler.generateObjectCode()
-    # Assembler.Save("ob1.txt")
+    Assembler.save("ob1.txt")
     objectCode = assembler.getObjectCode()
     print(objectCode)
     

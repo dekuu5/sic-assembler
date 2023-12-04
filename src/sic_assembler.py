@@ -125,19 +125,25 @@ class Assembler:
         if byteData.startswith("X'") and byteData.endswith("'"):
             return int(byteData[2:-1], 16)
         elif byteData.startswith("C'") and byteData.endswith("'"):
-            return ord(byteData[2: -1])
-        else:
-            return int(byteData)
+            dataInput = [hex(ord(char))[2:] for char in byteData[2:-1]]
+            dataOutput = ''.join(dataInput)
+            return dataOutput.upper()
 
     def wordToObjectCode(self, wordData):
-        if wordData.startswith("X'") and wordData.endswith("'"):
-            return int(wordData[2:-1], 16)
-        elif wordData.startswith("C'") and wordData.endswith("'"):
-            return sum(ord(char) << (8 * index) for index, char in enumerate(wordData[2:-1]))
-        else:
-            return int(wordData)
+        return hex(int(wordData))[2:]
         
     def getObjectCode(self):
         return self.objectCode
+    
+    def save(self, filename):
+        try:
+            with open(filename, 'w') as file:
+                for codeLine in self.objectCode:
+                    file.write(str(codeLine) + '\n')
+            print(f"Object code successfully saved to {filename}")
+            return True
+        except Exception as e:
+            print(f"Error saving object code to {filename}: {e}")
+            return False
                 
 
