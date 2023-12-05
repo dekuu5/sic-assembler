@@ -36,55 +36,56 @@ class PcGenerator:
 
 
 class Assembler:
-    def __init__(self, instructions, labelMap):
+    def __init__(self, instructions, labelMap, instructionMap):
         self.instructions = instructions
         self.labelMap= labelMap
         self.directives = ['BYTE', 'WORD', 'RESB', 'RESW']
         self.objectCode = []
-        self.instruction_map = {
-    'ADD': '18',
-    'AND': '40',
-    'COMP': '28',
-    'DIV': '24',
-    'J': '3C',
-    'JEQ': '30',
-    'JGT': '34',
-    'JLT': '38',
-    'JSUB': '48',
-    'LDA': '00',
-    'LDB': '68',
-    'LDCH': '50',
-    'LDF': '70',
-    'LDL': '08',
-    'LDS': '6C',
-    'LDT': '74',
-    'LDX': '04',
-    'MUL': '20',
-    'OR': '44',
-    'RD': 'D8',
-    'RSUB': '4C',
-    'SIO': 'F0',
-    'SSK': 'EC',
-    'STA': '0C',
-    'STB': '78',
-    'STCH': '54',
-    'STF': '80',
-    'STI': 'D4',
-    'STL': '14',
-    'STS': '7C',
-    'STSW': 'E8',
-    'STT': '84',
-    'STX': '10',
-    'SUB': '1C',
-    'SUBF': '5C',
-    'SUBR': '94',
-    'SVC': 'B0',
-    'TD': 'E0',
-    'TIO': 'F8',
-    'TIX': '2C',
-    'TIXR': 'B8',
-    'WD': 'DC',
-}
+        self.instruction_map = instructionMap
+#         s = {
+#     'ADD': '18',
+#     'AND': '40',
+#     'COMP': '28',
+#     'DIV': '24',
+#     'J': '3C',
+#     'JEQ': '30',
+#     'JGT': '34',
+#     'JLT': '38',
+#     'JSUB': '48',
+#     'LDA': '00',
+#     'LDB': '68',
+#     'LDCH': '50',
+#     'LDF': '70',
+#     'LDL': '08',
+#     'LDS': '6C',
+#     'LDT': '74',
+#     'LDX': '04',
+#     'MUL': '20',
+#     'OR': '44',
+#     'RD': 'D8',
+#     'RSUB': '4C',
+#     'SIO': 'F0',
+#     'SSK': 'EC',
+#     'STA': '0C',
+#     'STB': '78',
+#     'STCH': '54',
+#     'STF': '80',
+#     'STI': 'D4',
+#     'STL': '14',
+#     'STS': '7C',
+#     'STSW': 'E8',
+#     'STT': '84',
+#     'STX': '10',
+#     'SUB': '1C',
+#     'SUBF': '5C',
+#     'SUBR': '94',
+#     'SVC': 'B0',
+#     'TD': 'E0',
+#     'TIO': 'F8',
+#     'TIX': '2C',
+#     'TIXR': 'B8',
+#     'WD': 'DC',
+# }
         
 
     def generateObjectCode(self):
@@ -106,7 +107,6 @@ class Assembler:
         opCode = self.instruction_map[instruction[1]]
         binaryAddress =  bin(int(labelAddress, 16))[2:]
         binaryAddress = '1' + binaryAddress.zfill(15)
-        print(binaryAddress)
         labelAddress = hex(int(binaryAddress,2))[2:]
         self.objectCode.append(opCode + labelAddress)
     

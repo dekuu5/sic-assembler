@@ -8,17 +8,19 @@ def main():
         fileReader.read()
         instructions = fileReader.getInstructions()
     
+    opCodeFile = '/home/dekuu5/Code/myProjects/faculty-projects/sic-assembler/testEx/opCode.txt'
+    with FileReader(opCodeFile, True, False) as fileReaderOpcode:
+        fileReaderOpcode.read()
+        opCodeMap = fileReaderOpcode.getOpcodes()
+
     pcGenerator = PcGenerator(instructions)
     pcGenerator.generate()
     instructions = pcGenerator.getInstructions()
     labelMap = pcGenerator.getLabelMap()
-    for i in instructions:
-        print(i)
-    assembler = Assembler(instructions,labelMap)
-    assembler.generateObjectCode()
-    Assembler.save("ob1.txt")
+    assembler = Assembler(instructions,labelMap,opCodeMap)
     objectCode = assembler.getObjectCode()
-    print(objectCode)
+    assembler.generateObjectCode()
+    assembler.save("ob1.txt")
     
     
 
