@@ -18,7 +18,6 @@ def main():
     instructions = pcGenerator.getInstructions()
     labelMap = pcGenerator.getLabelMap()
     assembler = Assembler(instructions,labelMap,opCodeMap)
-    objectCode = assembler.getObjectCode()
     assembler.generateObjectCode()
     assembler.save("ob1.txt")
     
