@@ -24,6 +24,7 @@ def main():
     assembler = Assembler(instructions,labelMap,opCodeMap)
     assembler.generateObjectCode()
     assembler.save("ob1.txt")
+    print(assembler.FinalObjectCode)
     
     
 

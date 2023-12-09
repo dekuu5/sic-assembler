@@ -49,10 +49,10 @@ class Assembler:
 
     def generateObjectCode(self):
         for instruction in self.instructions[1:]:
-            if ',X' in instruction[2]:
+            if ',X' in instruction[-1]:
                 instruction = [i.replace(',X', '') for i in instruction]
                 self.GenerateObjectCodeIndexing(instruction)
-            elif instruction[1] == 'RESW' or instruction[1] == 'RESB':
+            elif instruction[1] == 'RESW' or instruction[1] == 'RESB' or instruction[1] == 'END':
                 continue
             elif instruction[1] == 'BYTE' or instruction[1] == 'WORD':
                 self.generateObjectCodeByteOrWord(instruction)
@@ -60,6 +60,7 @@ class Assembler:
                 self.generateObjectCodeNonIndexing(instruction)
             
         print("Object Code Generated")
+        self.formatObjectCode()
     
     def GenerateObjectCodeIndexing(self, instruction):
         labelAddress = self.labelMap[instruction[2]]
@@ -106,8 +107,9 @@ class Assembler:
             return False
     
     def formatObjectCode(self):
-        header = f"H^{''.join(self.instructions[0])}^{self.instructions[1][0]}^{int(len(self.objectCode),16)}"
-        end = f"E^{self.instructions[1][0]}"
-        text = f"T^{self.instructions[1][0][2:]}^{int(len(self.objectCode),16)}^{self.objectCode[0]}"
+        header = f"H^{self.instructions[0][0]}^{self.instructions[1][0][2:]}^{int(str(len(self.instructions)-1),16)}"
+        end = f"E^{self.instructions[1][0][2:]}"
+        text = f"T^{self.instructions[1][0][2:]}^{int(str(len(self.objectCode)),16)}^{''.join(x.zfill(6) for x in self.objectCode)}"
+        self.FinalObjectCode = f"{header}\n{text}\n{end}"
                 
 
