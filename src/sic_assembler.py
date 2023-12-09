@@ -104,5 +104,10 @@ class Assembler:
         except Exception as e:
             print(f"Error saving object code to {filename}: {e}")
             return False
+    
+    def formatObjectCode(self):
+        header = f"H^{''.join(self.instructions[0])}^{self.instructions[1][0]}^{int(len(self.objectCode),16)}"
+        end = f"E^{self.instructions[1][0]}"
+        text = f"T^{self.instructions[1][0][2:]}^{int(len(self.objectCode),16)}^{self.objectCode[0]}"
                 
 
