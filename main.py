@@ -17,6 +17,10 @@ def main():
     pcGenerator.generate()
     instructions = pcGenerator.getInstructions()
     labelMap = pcGenerator.getLabelMap()
+    for i in instructions:
+        for j in i :
+            print(j,end = "\t")
+        print()
     assembler = Assembler(instructions,labelMap,opCodeMap)
     assembler.generateObjectCode()
     assembler.save("ob1.txt")

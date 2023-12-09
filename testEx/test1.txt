@@ -1,4 +1,4 @@
-program start 1000
+program start 0000  
 LDX ZERO 
 MOVECH LDCH STR1,X
 STCH STR2,X 
