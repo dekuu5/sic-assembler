@@ -136,7 +136,7 @@ class Assembler:
                 j=self.instructions[i+1][0][2:]
                 obj=[item]
                 index=len(item)
-        text=f"T^{j.zfill(6)}^{hex(int(index/2))[2:].z}^{'^'.join(obj)}"
+        text=f"T^{j.zfill(6)}^{hex(int(index/2))[2:].zfill(2)}^{'^'.join(obj)}"
         textRecord.append(text)
         t='\n'.join(textRecord)
         self.FinalObjectCode = f"{header}\n{t}\n{end}"
