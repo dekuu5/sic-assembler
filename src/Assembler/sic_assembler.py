@@ -49,6 +49,7 @@ class Assembler:
         self.directives = ['BYTE', 'WORD', 'RESB', 'RESW']
         self.objectCode = []
         self.instruction_map = instructionMap
+        
 
     def generateObjectCode(self):
         for instruction in self.instructions[1:]:
@@ -80,6 +81,9 @@ class Assembler:
             self.objectCode.append(self.wordToObjectCode(instruction[2]))
         
     def generateObjectCodeNonIndexing(self,instruction):
+        if instruction[1] == 'RSUB':
+            self.objectCode.append(self.instruction_map[instruction[1]] + '0000')
+            return
         labelAddres = self.labelMap[instruction[2]][2:]
         opCode = self.instruction_map[instruction[1]]
         self.objectCode.append(opCode + labelAddres.zfill(4))

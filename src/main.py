@@ -1,14 +1,39 @@
-from src.file_reader import FileReader
-from src.sic_assembler import PcGenerator,Assembler
+from Assembler.file_reader import FileReader
+from Assembler.sic_assembler import PcGenerator,Assembler
+import sys
+import os
+
+
+def find_file(file_path):
+    if os.path.isfile(file_path):
+        print(f"File found: {file_path}")
+        return True
+    else:
+        print(f"File not found: {file_path}")
+        return False
+
+def getFilePath():
+    print(sys.argv)
+    if len(sys.argv)< 3:
+        print(f"Usage: python {sys.argv[0]} <SIC_CODE> <OP_code_PatH>")
+        sys.exit(1)
+    sicCode = sys.argv[1]
+    OPCode = sys.argv[2]
+
+    if find_file(sicCode) and find_file(OPCode):
+        return sicCode, OPCode  
+    else:
+        
+        sys.exit(1)
+
 
 
 def main():
-    fileName = r'C:\Users\Alaa\Source\Repos\dekuu5\sic-assembler\testEx\test1.txt'
+    fileName, opCodeFile = getFilePath()
     with FileReader(fileName, False, True) as fileReader:
         fileReader.read()
         instructions = fileReader.getInstructions()
     
-    opCodeFile = r'C:\Users\Alaa\Source\Repos\dekuu5\sic-assembler\testEx\opCode.txt'
     with FileReader(opCodeFile, True, False) as fileReaderOpcode:
         fileReaderOpcode.read()
         opCodeMap = fileReaderOpcode.getOpcodes()

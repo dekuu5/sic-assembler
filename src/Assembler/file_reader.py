@@ -20,6 +20,7 @@ class FileReader:
         if self.file:
             self.file.close()
             print("File closed")
+    
         
     def read(self):
         if self.opcode_flag:
@@ -28,6 +29,8 @@ class FileReader:
             self.read_instructions()
 
     def parse_instruction(self, line):
+        if line[0] == '.':
+            return None
         parts = line.split(" ", 2)
         parts = [part.strip() for part in parts if part.strip()]
 
@@ -39,7 +42,7 @@ class FileReader:
         parts = [part.strip() for part in parts if part.strip()]
 
         if len(parts) > 0:
-            self.opcodes[parts[0]] = parts[1]
+            self.opcodes[parts[0]] = parts[-1]
 
     def read_instructions(self) -> None:
         if not self.file:

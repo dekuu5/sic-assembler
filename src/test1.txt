@@ -4,6 +4,8 @@ MOVECH LDCH STR1,X
 STCH STR2,X 
 TIX ELEVEN
 JLT MOVECH
+RSUB
+.this is working corectly
 STR1 BYTE C'Hello world sssssssssss'
 ZERO WORD 0
 ELEVEN WORD 11
