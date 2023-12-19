@@ -1,3 +1,6 @@
+from textwrap import indent
+
+
 class PcGenerator:
     def __init__(self,instructions):
         self.instructions = instructions
@@ -79,7 +82,7 @@ class Assembler:
     def generateObjectCodeNonIndexing(self,instruction):
         labelAddres = self.labelMap[instruction[2]][2:]
         opCode = self.instruction_map[instruction[1]]
-        self.objectCode.append(opCode + labelAddres)
+        self.objectCode.append(opCode + labelAddres.zfill(4))
 
     def byteToObjectCode(self, byteData):
         if byteData.startswith("X'") and byteData.endswith("'"):
@@ -98,8 +101,16 @@ class Assembler:
     def save(self, filename):
         try:
             with open(filename, 'w') as file:
+                file.write("\t SYM_table\n")
+                for i, j in self.labelMap.items():
+                    file.write(f"{i}: {j}\n") 
+                file.write("\t Op_table\n")
+                for i in self.instructions[1:]:
+                    if i[1] in self.directives or i[1] == 'END': continue
+                    file.write(f"{i[1]}: {self.instruction_map[i[1]]}\n") 
                 for codeLine in self.objectCode:
                     file.write(str(codeLine) + '\n')
+                file.write(self.FinalObjectCode)
             print(f"Object code successfully saved to {filename}")
             return True
         except Exception as e:
@@ -107,9 +118,27 @@ class Assembler:
             return False
     
     def formatObjectCode(self):
+        index =0
+        obj=[]
+        textRecord=[]
         header = f"H^{self.instructions[0][0]}^{self.instructions[1][0][2:]}^{int(str(len(self.instructions)-1),16)}"
         end = f"E^{self.instructions[1][0][2:]}"
         text = f"T^{self.instructions[1][0][2:]}^{int(str(len(self.objectCode)),16)}^{''.join(x.zfill(6) for x in self.objectCode)}"
-        self.FinalObjectCode = f"{header}\n{text}\n{end}"
+        j=self.instructions[1][0][2:]
+        for i, item in enumerate(self.objectCode):
+            index += len(item)
+            if index<=60:
+                obj.append(item)
+            else:
+                index -=len(item)
+                text=f"T^{j.zfill(6)}^{hex(int(index/2))[2:].zfill(2)}^{'^'.join(obj)}"
+                textRecord.append(text)
+                j=self.instructions[i+1][0][2:]
+                obj=[item]
+                index=len(item)
+        text=f"T^{j.zfill(6)}^{hex(int(index/2))[2:].zfill(2)}^{'^'.join(obj)}"
+        textRecord.append(text)
+        t='\n'.join(textRecord)
+        self.FinalObjectCode = f"{header}\n{t}\n{end}"
                 
 
