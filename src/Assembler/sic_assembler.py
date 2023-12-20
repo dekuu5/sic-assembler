@@ -1,4 +1,3 @@
-from textwrap import indent
 
 
 class PcGenerator:
@@ -16,6 +15,7 @@ class PcGenerator:
         currentPc = self.start 
         for index, instruction in enumerate(self.instructions[1:]):
             if len(instruction) < 3:
+                
                 self.instructions[index + 1].insert(0, hex(currentPc))
                 currentPc += 3
             elif instruction[1] in self.directives:
@@ -50,6 +50,7 @@ class Assembler:
         self.objectCode = []
         self.instruction_map = instructionMap
         
+        
 
     def generateObjectCode(self):
         for instruction in self.instructions[1:]:
@@ -64,6 +65,7 @@ class Assembler:
                 self.generateObjectCodeNonIndexing(instruction)
             
         print("Object Code Generated")
+        print(self.objectCode)
         self.formatObjectCode()
     
     def GenerateObjectCodeIndexing(self, instruction):
@@ -84,13 +86,15 @@ class Assembler:
         if instruction[1] == 'RSUB':
             self.objectCode.append(self.instruction_map[instruction[1]] + '0000')
             return
-        labelAddres = self.labelMap[instruction[2]][2:]
+        print(instruction)
+        labelAddres = self.labelMap[instruction[-1]][2:]
         opCode = self.instruction_map[instruction[1]]
         self.objectCode.append(opCode + labelAddres.zfill(4))
 
     def byteToObjectCode(self, byteData):
+        print(byteData)
         if byteData.startswith("X'") and byteData.endswith("'"):
-            return int(byteData[2:-1], 16)
+            return byteData[2:-1]
         elif byteData.startswith("C'") and byteData.endswith("'"):
             dataInput = [hex(ord(char))[2:] for char in byteData[2:-1]]
             dataOutput = ''.join(dataInput)
@@ -125,11 +129,12 @@ class Assembler:
         index =0
         obj=[]
         textRecord=[]
-        header = f"H^{self.instructions[0][0]}^{self.instructions[1][0][2:]}^{int(str(len(self.instructions)-1),16)}"
+        length = hex(int(self.instructions[-1][0][2:], 16) - int(self.instructions[1][0][2:], 16))[2:].zfill(6)
+        header = f"H^{self.instructions[0][0]}^{self.instructions[1][0][2:]}^{length}"
         end = f"E^{self.instructions[1][0][2:]}"
-        text = f"T^{self.instructions[1][0][2:]}^{int(str(len(self.objectCode)),16)}^{''.join(x.zfill(6) for x in self.objectCode)}"
         j=self.instructions[1][0][2:]
         for i, item in enumerate(self.objectCode):
+            print(item)
             index += len(item)
             if index<=60:
                 obj.append(item)

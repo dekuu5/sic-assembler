@@ -28,11 +28,12 @@ class FileReader:
         elif self.instruction_flag:
             self.read_instructions()
 
-    def parse_instruction(self, line):
+    def parse_instruction(self, line:str):
         if line[0] == '.':
             return None
-        parts = line.split(" ", 2)
-        parts = [part.strip() for part in parts if part.strip()]
+        line = line.strip()
+        parts = self.split(line)
+        print(parts)
 
         if len(parts) > 0:
             self.instructions.append(parts)
@@ -68,6 +69,22 @@ class FileReader:
     
     def getOpcodes(self):
         return self.opcodes
+    
+    def split(self, line):
+        parts = []
+        word = ''
+        for c in line:
+            if c == ' ':
+                if word == '':
+                    continue
+                else :
+                    parts.append(word)
+                    word = ''
+            else :
+                word += c
+        parts.append(word)
+        return parts
+                
 
 # TODO : change read method to read opcode or instructions
 # TODO : make a functions for parsing instructions and anther for parsing opcodes

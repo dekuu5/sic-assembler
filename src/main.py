@@ -13,7 +13,6 @@ def find_file(file_path):
         return False
 
 def getFilePath():
-    print(sys.argv)
     if len(sys.argv)< 3:
         print(f"Usage: python {sys.argv[0]} <SIC_CODE> <OP_code_PatH>")
         sys.exit(1)

@@ -5,8 +5,8 @@ STCH STR2,X
 TIX ELEVEN
 JLT MOVECH
 RSUB
-.this is working corectly
-STR1 BYTE C'Hello world sssssssssss'
+.this is comment it won't apper in the program
+STR1 BYTE C'Hello world'
 ZERO WORD 0
 ELEVEN WORD 11
 STR2 RESB 11
